@@ -34,7 +34,6 @@ describe('app routes', () => {
 
   it('can login a user', async() => {
     const user = await User.create({ email: 'test@test.com', password: 'password' });
-    console.log('USERRRRRRR', user);
     return request(app)
       .post('/api/v1/auth/login')
       .send({ email: 'test@test.com', password: 'password' })
