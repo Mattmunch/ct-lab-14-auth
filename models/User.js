@@ -5,14 +5,10 @@ const jwt = require('jsonwebtoken');
 const schema = new mongoose.Schema({
   email: {
     type: String,
-    require: true
-  }
-}, {
-  display: {
-    type: String,
-    require:true
-  }
-}, {
+    required: true,
+    unique: true
+  },
+
   passwordHash: {
     type: String,
     required: true
@@ -27,6 +23,7 @@ const schema = new mongoose.Schema({
 
 schema.virtual('password').set(function(password) {
   this.passwordHash = bcrypt.hashSync(password, 14);
+  console.log('PASSWORDHASH', this.passwordHash);
 });
 
 schema.statics.authenticate = async function({ email, password }) {
@@ -36,7 +33,7 @@ schema.statics.authenticate = async function({ email, password }) {
     err.status = 401;
     throw err;
   }
-    
+  console.log(password, user);
   const validPassword = bcrypt.compareSync(password, user.passwordHash);
   if(!validPassword) {
     const err = new Error('Invalid Email/Password');
